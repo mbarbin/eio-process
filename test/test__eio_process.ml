@@ -42,7 +42,6 @@ let%expect_test "run" =
     Eio_process.run_stdout
       ~process_mgr:(Eio.Stdenv.process_mgr env)
       ~cwd:(Eio.Stdenv.cwd env)
-      ~stdin:(Eio.Flow.string_source "Hello World!")
       ~prog:"./bin/main.exe"
       ~args:[]
       ()
@@ -53,7 +52,6 @@ let%expect_test "run" =
     Eio_process.run_stdout
       ~process_mgr:(Eio.Stdenv.process_mgr env)
       ~cwd:(Eio.Stdenv.cwd env)
-      ~stdin:(Eio.Flow.string_source "Hello World!")
       ~prog:"./bin/main.exe"
       ~args:[ "--exit-code"; "128" ]
       ()
@@ -73,7 +71,6 @@ let%expect_test "run" =
     Eio_process.run_stdout
       ~process_mgr:(Eio.Stdenv.process_mgr env)
       ~cwd:(Eio.Stdenv.cwd env)
-      ~stdin:(Eio.Flow.string_source "Hello World!")
       ~accept_nonzero_exit:[ 128 ]
       ~prog:"./bin/main.exe"
       ~args:[ "--exit-code"; "128" ]
@@ -81,6 +78,25 @@ let%expect_test "run" =
   in
   print_s [%sexp (result : string Or_error.t)];
   [%expect {| (Ok "") |}];
+  (* Signal. *)
+  let result =
+    Eio_process.run_stdout
+      ~process_mgr:(Eio.Stdenv.process_mgr env)
+      ~cwd:(Eio.Stdenv.cwd env)
+      ~prog:"./bin/main.exe"
+      ~args:[ "--signal" ]
+      ()
+  in
+  print_s [%sexp (result : string Or_error.t)];
+  [%expect {|
+    (Error (
+      (prog ./bin/main.exe)
+      (args (--signal))
+      (exit_status (Signaled -7))
+      (cwd    "")
+      (stdout "")
+      (stderr "")
+      (error ("unexpected exit status" ((accept_nonzero_exit ())))))) |}];
   (* Run lines. *)
   let result =
     Eio_process.run_lines
@@ -147,14 +163,13 @@ let%expect_test "run" =
       ~process_mgr:(Eio.Stdenv.process_mgr env)
       ~cwd:(Eio.Stdenv.cwd env)
       ~prog:"./bin/main.exe"
-      ~args:[ "--stdout"; "--output-sexp"; "--exit-code"; "128" ]
+      ~args:[ "--stdout"; "--stderr"; "--output-sexp"; "--exit-code"; "128" ]
       ()
       ~f:(fun output ->
         match%map
           Eio_process.Output.exited output ~accept_exit_codes:[ 0, `Zero; 1, `One ]
         with
-        | `Zero -> 0
-        | `One -> 1)
+        | `Zero | `One -> assert false)
   in
   (* When the user function [f] returned an Error, we include all the info in
      the error message. *)
@@ -163,11 +178,11 @@ let%expect_test "run" =
     {|
     (Error (
       (prog ./bin/main.exe)
-      (args (--stdout --output-sexp --exit-code 128))
+      (args (--stdout --stderr --output-sexp --exit-code 128))
       (exit_status (Exited 128))
       (cwd "")
       (stdout ((words (Lorem ipsum dolor sit amet))))
-      (stderr "")
+      (stderr ())
       (error ("unexpected exit status" ((accepted_exit_codes (0 1))))))) |}];
   let result =
     Eio_process.run
@@ -180,8 +195,8 @@ let%expect_test "run" =
         match%map
           Eio_process.Output.exited output ~accept_exit_codes:[ 0, `Zero; 1, `One ]
         with
-        | `Zero -> 0
-        | `One -> 1)
+        | `One -> 1
+        | `Zero -> assert false)
   in
   print_s [%sexp (result : int Or_error.t)];
   [%expect {| (Ok 1) |}];
