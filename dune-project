@@ -17,7 +17,8 @@
 
 (package
  (name eio-process)
- (synopsis "Run external processes in [Eio] with an api that resembles [Async_unix.Process]")
+ (synopsis
+  "Run external processes in [Eio] with an api that resembles [Async_unix.Process]")
  (depends
   (ocaml
    (>= 5.1))
