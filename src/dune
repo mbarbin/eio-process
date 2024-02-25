@@ -10,8 +10,8 @@
   -open
   Base
   -open
-  Stdio)
- (libraries base core.command stdio)
+  Or_error.Let_syntax)
+ (libraries base eio parsexp)
  (instrumentation
   (backend bisect_ppx))
  (preprocess

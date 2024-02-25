@@ -7,14 +7,14 @@ This is an experimental library to spawn external processes in
 [Eio](https://github.com/ocaml-multicore/eio) with an api that resembles
 [Async.Process](https://github.com/janestreet/async_unix).
 
-This project re-uses many function names from the `Async_unix.Process`
+This project re-uses some function and type names from the `Async_unix.Process`
 interface. The implementation however is quite different, since the original
 runs in the `Async` monad, whereas this lib targets `Eio`.
 
 ## Motivation
 
-We find that this API offers many convenient wrappers and we believe that it is
-a good fit on top of the core functionality offered by `Eio.Process`.
+We find that this API offers convenient wrappers that we believe are a good fit
+on top of the core functionality offered by `Eio.Process`.
 
 ## Usage
 
@@ -41,7 +41,3 @@ permission notice are included at the root of this project, in the file
 
 The code documentation of the latest release is built with `odoc` and published
 to `GitHub` pages [here](https://mbarbin.github.io/eio-process).
-
-## Current Status
-
-The project is currently in the draft/building stage. Come back soon!

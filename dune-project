@@ -41,6 +41,10 @@
     :with-test
     (>= v0.16)
     (< v0.17)))
+  (parsexp
+   (and
+    (>= v0.16)
+    (< v0.17)))
   (ppx_jane
    (and
     (>= v0.16)
