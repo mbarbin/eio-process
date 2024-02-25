@@ -37,6 +37,6 @@ let () =
     if !output_sexp
     then Stdlib.prerr_endline "()"
     else Stdlib.prerr_endline (force lorem_ipsum);
-  if !signal then Unix.kill (Unix.getpid ()) Stdlib.Sys.sigkill;
+  if !signal then Unix.kill (Unix.getpid ()) Stdlib.Sys.sigkill [@coverage off];
   Stdlib.exit !exit_code [@coverage off]
 ;;

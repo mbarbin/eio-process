@@ -66,7 +66,7 @@ let%expect_test "run" =
       (cwd    "")
       (stdout "")
       (stderr "")
-      (error ("unexpected exit status" ((accept_nonzero_exit ())))))) |}];
+      (error ("unexpected exit status" ((accept_exit_codes (0))))))) |}];
   let result =
     Eio_process.run_stdout
       ~process_mgr:(Eio.Stdenv.process_mgr env)
@@ -88,7 +88,8 @@ let%expect_test "run" =
       ()
   in
   print_s [%sexp (result : string Or_error.t)];
-  [%expect {|
+  [%expect
+    {|
     (Error (
       (prog ./bin/main.exe)
       (args (--signal))
@@ -96,7 +97,7 @@ let%expect_test "run" =
       (cwd    "")
       (stdout "")
       (stderr "")
-      (error ("unexpected exit status" ((accept_nonzero_exit ())))))) |}];
+      (error ("unexpected exit status" ((accept_exit_codes (0))))))) |}];
   (* Run lines. *)
   let result =
     Eio_process.run_lines
@@ -153,8 +154,7 @@ let%expect_test "run" =
       (stdout (
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis nisi id"
         "lorem scelerisque bibendum eget id felis. Pellentesque consectetur tincidunt"
-        ornare.
-        ""))
+        ornare.))
       (stderr "")
       (error  "expected no output"))) |}];
   (* User further processing the output. *)
@@ -183,7 +183,7 @@ let%expect_test "run" =
       (cwd "")
       (stdout ((words (Lorem ipsum dolor sit amet))))
       (stderr ())
-      (error ("unexpected exit status" ((accepted_exit_codes (0 1))))))) |}];
+      (error ("unexpected exit status" ((accept_exit_codes (0 1))))))) |}];
   let result =
     Eio_process.run
       ~process_mgr:(Eio.Stdenv.process_mgr env)
@@ -200,5 +200,14 @@ let%expect_test "run" =
   in
   print_s [%sexp (result : int Or_error.t)];
   [%expect {| (Ok 1) |}];
+  ()
+;;
+
+let%expect_test "lines" =
+  (* We monitor this as these results influence the implementation [Lines_or_sexp]. *)
+  print_s [%sexp (String.split ~on:'\n' "" : string list)];
+  [%expect {| ("") |}];
+  print_s [%sexp (String.split_lines "" : string list)];
+  [%expect {| () |}];
   ()
 ;;

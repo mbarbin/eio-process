@@ -15,14 +15,14 @@ module Lines_or_sexp = struct
 
   let sexp_of_t t =
     match t with
-    | Lines ([] | [ "" ]) -> [%sexp ""]
+    | Lines [] -> [%sexp ""]
     | Lines lines -> [%sexp (lines : string list)]
     | Sexp sexp -> sexp
   ;;
 
   let create string =
     try Sexp (Parsexp.Conv_single.parse_string_exn string Fn.id) with
-    | _ -> Lines (String.split ~on:'\n' string)
+    | _ -> Lines (String.split_lines string)
   ;;
 end
 
@@ -41,19 +41,6 @@ module Output = struct
       }]
   ;;
 
-  let exit ?(accept_nonzero_exit = []) { stdout = _; stderr = _; exit_status } =
-    match exit_status with
-    | `Exited n when n = 0 || List.mem accept_nonzero_exit n ~equal:Int.equal -> Ok ()
-    | `Exited _ | `Signaled _ ->
-      Or_error.error_s
-        [%sexp "unexpected exit status", { accept_nonzero_exit : int list }]
-  ;;
-
-  let exit_and_stdout ?accept_nonzero_exit t =
-    let%map () = exit t ?accept_nonzero_exit in
-    t.stdout
-  ;;
-
   let exited t ~accept_exit_codes =
     match
       match t.exit_status with
@@ -65,7 +52,19 @@ module Output = struct
       Or_error.error_s
         [%sexp
           "unexpected exit status"
-          , { accepted_exit_codes = (List.map accept_exit_codes ~f:fst : int list) }]
+          , { accept_exit_codes = (List.map accept_exit_codes ~f:fst : int list) }]
+  ;;
+
+  let exit ?(accept_nonzero_exit = []) t =
+    exited
+      t
+      ~accept_exit_codes:
+        ((0, ()) :: List.map accept_nonzero_exit ~f:(fun code -> code, ()))
+  ;;
+
+  let exit_and_stdout ?accept_nonzero_exit t =
+    let%map () = exit t ?accept_nonzero_exit in
+    t.stdout
   ;;
 
   let expect_no_output ?(accept_nonzero_exit = []) t =
