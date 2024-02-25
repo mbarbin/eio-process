@@ -9,14 +9,11 @@
   -open
   Base
   -open
-  Stdio
-  -open
   Expect_test_helpers_base)
  (libraries
   base
   eio_process
-  expect_test_helpers_core.expect_test_helpers_base
-  stdio)
+  expect_test_helpers_core.expect_test_helpers_base)
  (inline_tests)
  (instrumentation
   (backend bisect_ppx))
