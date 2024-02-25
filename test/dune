@@ -14,9 +14,11 @@
   Expect_test_helpers_base)
  (libraries
   base
+  eio_process
   expect_test_helpers_core.expect_test_helpers_base
-  stdio
-  eio_process)
+  stdio)
  (inline_tests)
+ (instrumentation
+  (backend bisect_ppx))
  (preprocess
   (pps ppx_jane ppx_js_style -check-doc-comments)))

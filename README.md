@@ -1,6 +1,7 @@
 # eio-process
 
 [![CI Status](https://github.com/mbarbin/eio-process/workflows/ci/badge.svg)](https://github.com/mbarbin/eio-process/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/mbarbin/eio-process/badge.svg?branch=main)](https://coveralls.io/github/mbarbin/eio-process?branch=main)
 
 This is an experimental library to spawn external processes in
 [Eio](https://github.com/ocaml-multicore/eio) with an api that resembles
