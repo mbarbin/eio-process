@@ -9,14 +9,10 @@
   -open
   Base
   -open
-  Expect_test_helpers_base
+  Expect_test_helpers
   -open
   Or_error.Let_syntax)
- (libraries
-  base
-  eio_main
-  eio_process
-  expect_test_helpers_core.expect_test_helpers_base)
+ (libraries base eio_main eio_process expect-test-helpers)
  (inline_tests
   (deps ./bin/main.exe))
  (instrumentation
