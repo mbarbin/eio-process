@@ -1,5 +1,6 @@
 (library
  (name eio_process_test)
+ (public_name eio-process-tests.eio_process_test)
  (flags
   :standard
   -w
@@ -9,10 +10,14 @@
   -open
   Base
   -open
-  Expect_test_helpers
+  Expect_test_helpers_base
   -open
   Or_error.Let_syntax)
- (libraries base eio_main eio_process expect-test-helpers)
+ (libraries
+  base
+  eio_main
+  eio_process
+  expect_test_helpers_core.expect_test_helpers_base)
  (inline_tests
   (deps ./bin/main.exe))
  (instrumentation
