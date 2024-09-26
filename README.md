@@ -37,7 +37,7 @@ the `Async_unix.Process` module which we took inspiration from in this project.
 permission notice are included at the root of this project, in the file
 `LICENSE.janestreet`.
 
-## Code documentation
+## Code Documentation
 
 The code documentation of the latest release is built with `odoc` and published
 to `GitHub` pages [here](https://mbarbin.github.io/eio-process).
