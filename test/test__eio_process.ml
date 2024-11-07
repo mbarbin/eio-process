@@ -166,7 +166,7 @@ let%expect_test "run" =
       ~args:[ "--stdout"; "--stderr"; "--output-sexp"; "--exit-code"; "128" ]
       ()
       ~f:(fun output ->
-        match%map
+        match%map.Or_error
           Eio_process.Output.exited output ~accept_exit_codes:[ 0, `Zero; 1, `One ]
         with
         | `Zero | `One -> assert false)
@@ -192,7 +192,7 @@ let%expect_test "run" =
       ~args:[ "--stdout"; "--output-sexp"; "--exit-code"; "1" ]
       ()
       ~f:(fun output ->
-        match%map
+        match%map.Or_error
           Eio_process.Output.exited output ~accept_exit_codes:[ 0, `Zero; 1, `One ]
         with
         | `One -> 1

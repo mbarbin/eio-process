@@ -63,12 +63,12 @@ module Output = struct
   ;;
 
   let exit_and_stdout ?accept_nonzero_exit t =
-    let%map () = exit t ?accept_nonzero_exit in
+    let%map.Or_error () = exit t ?accept_nonzero_exit in
     t.stdout
   ;;
 
   let expect_no_output ?(accept_nonzero_exit = []) t =
-    let%bind stdout = exit_and_stdout t ~accept_nonzero_exit in
+    let%bind.Or_error stdout = exit_and_stdout t ~accept_nonzero_exit in
     if String.is_empty stdout then Ok () else Or_error.error_string "expected no output"
   ;;
 end
@@ -137,7 +137,8 @@ let run_stdout ~process_mgr ~cwd ?stdin ?accept_nonzero_exit ?env ~prog ~args ()
 
 let run_lines ~process_mgr ~cwd ?stdin ?accept_nonzero_exit ?env ~prog ~args () =
   run ~process_mgr ~cwd ?stdin ?env ~prog ~args () ~f:(fun output ->
-    Output.exit_and_stdout output ?accept_nonzero_exit >>| String.split_lines)
+    Output.exit_and_stdout output ?accept_nonzero_exit
+    |> Or_error.map ~f:String.split_lines)
 ;;
 
 let run_expect_no_output ~process_mgr ~cwd ?stdin ?accept_nonzero_exit ?env ~prog ~args ()
