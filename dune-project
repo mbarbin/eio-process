@@ -15,6 +15,8 @@
 
 (documentation "https://mbarbin.github.io/eio-process/")
 
+(implicit_transitive_deps false)
+
 (package
  (name eio-process)
  (synopsis
