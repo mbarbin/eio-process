@@ -52,7 +52,7 @@ module Output = struct
       Or_error.error_s
         [%sexp
           "unexpected exit status"
-          , { accept_exit_codes = (List.map accept_exit_codes ~f:fst : int list) }]
+        , { accept_exit_codes = (List.map accept_exit_codes ~f:fst : int list) }]
   ;;
 
   let exit ?(accept_nonzero_exit = []) t =
