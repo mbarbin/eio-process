@@ -4,5 +4,7 @@
  (libraries base unix)
  (instrumentation
   (backend bisect_ppx))
+ (lint
+  (pps ppx_js_style -check-doc-comments))
  (preprocess
-  (pps ppx_sexp_value ppx_js_style -check-doc-comments)))
+  (pps ppx_sexp_value)))
