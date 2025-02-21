@@ -3,6 +3,10 @@
 [![CI Status](https://github.com/mbarbin/eio-process/workflows/ci/badge.svg)](https://github.com/mbarbin/eio-process/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/mbarbin/eio-process/badge.svg?branch=main)](https://coveralls.io/github/mbarbin/eio-process?branch=main)
 
+:warning: This repository is now a public archive. I have stopped developping the `eio-process` project and will not be maintaining it forward.
+
+---
+
 This is an experimental library to spawn external processes in [Eio](https://github.com/ocaml-multicore/eio) with an api that resembles [Async.Process](https://github.com/janestreet/async_unix).
 
 This project re-uses some function and type names from the `Async_unix.Process` interface. The implementation however is quite different, since the original runs in the `Async` monad, whereas this lib targets `Eio`.
